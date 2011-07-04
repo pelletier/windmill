@@ -93,12 +93,19 @@ class TestServerThread(threading.Thread):
             
         if create_db:
             from django.db import connection
-            db_name = connection.creation.create_test_db(0)
+            connection.creation.create_test_db(0)
+
+            # Structure the database
+            call_command('syncdb')
+            if "south" in settings.INSTALLED_APPS: 
+                call_command('migrate')
+
             # Import the fixture data into the test database.
             if hasattr(self, 'fixtures'):
                 # We have to use this slightly awkward syntax due to the fact
                 # that we're using *args and **kwargs together.
                 call_command('loaddata', *self.fixtures, **{'verbosity': 1})
+
 
         # Loop until we get a stop event.
         while not self._stopevent.isSet():

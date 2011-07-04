@@ -50,6 +50,7 @@ def setup_module(module):
     else:
         module.windmill_dict = admin_lib.shell_objects_dict
 
+
 def teardown_module(module):
     """teardown_module function for functest based python tests"""
     try:
