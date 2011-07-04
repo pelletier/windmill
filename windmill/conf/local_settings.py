@@ -80,6 +80,18 @@ def locateSettings(dirName='windmill'):
         dataDir     = os.path.expanduser('~')
         settingsDir = os.path.join(dataDir, '.%s' % dirName)
 
+    # Try to find a configuration directory in the Django project (if using it.)
+    try:
+        from django.conf import settings
+        possible_settingsDir = os.path.dirname(os.path.normpath(os.sys.modules[settings.SETTINGS_MODULE].__file__))
+        possible_dirs = ['windmill_conf', 'windmill']
+        for dir in possible_dirs:
+            concat_path = os.path.join(possible_settingsDir, dir)
+            if os.path.isdir(concat_path):
+                settingsDir = concat_path
+    except ImportError:
+        pass # Not using django
+
     if settingsDir is not None and not os.path.isdir(settingsDir):
         try:
             os.makedirs(settingsDir, 0700)
