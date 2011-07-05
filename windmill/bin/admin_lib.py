@@ -18,7 +18,6 @@ import windmill
 import logging
 from time import sleep
 import os, sys
-from datetime import datetime
 from threading import Thread
 import shutil
 import socket

@@ -17,13 +17,17 @@ import global_settings
 import sys
 from time import sleep
 
+
+
 class IOWrapper(StringIO):
     fileno = sys.__stderr__.fileno 
+
 
 class FunctestRunnerInterface(object):
     """Simple class that returns a stub function if one of the methods isn't implemented"""
     def __getattr__(self, name):
         return lambda *args, **kwargs : None
+
 
 class CLIRunner(object):
     
@@ -105,6 +109,7 @@ class CLIRunner(object):
     def print_wrapped_output(self):
         outs = self.get_stdout_wrap()
         if len(outs) > 1:
+            # SRSLY, never tried to do something like "-"*37?
             self.output.write('-------------------------------------\n')
         self.output.write(outs)
         self.output.flush()
@@ -117,6 +122,12 @@ class CLIRunner(object):
                                                            str(totals['skip']),
                                                             ]
                     )
+        # What about the readable version?
+        # total = {
+        #     'Passes: ': totals['pass'],
+        #     'Failed: ': totals['fail'],
+        #     'Skipped: ': totals['skip'],
+        # }
         self.output.write( ', '.join( [ e[0]+e[1] for e in total ] )+'\n' )
         self.output.flush()
     
